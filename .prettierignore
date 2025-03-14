@@ -1,0 +1,25 @@
+# Build outputs
+build
+dist
+.svelte-kit
+package
+
+# Node modules
+node_modules
+
+# Tauri related
+src-tauri/target
+src-tauri/gen
+src-tauri/WixTools
+
+# Package files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Generated files
+.DS_Store
+*.log
+
+# Markdown files (optional, remove if you want to format markdown)
+# *.md 
