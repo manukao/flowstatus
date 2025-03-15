@@ -1,5 +1,5 @@
 <script lang="ts">
-  // You can keep any necessary imports or state here
+  import '../app.css';
 </script>
 
 <main class="flex min-h-screen flex-col items-center justify-center p-8 text-center">
@@ -11,6 +11,6 @@
   </p>
 
   <div class="rounded-lg bg-white/10 p-6 backdrop-blur-sm">
-    <p class="text-lg">Ready to enhance your focus and productivity.</p>
+    <p class="btn btn-primary text-lg">Ready to enhance your focus and productivity.</p>
   </div>
 </main>
