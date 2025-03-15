@@ -34,15 +34,17 @@
   }
 </script>
 
-<div class="flex w-full max-w-md flex-col items-center gap-8 p-8 text-center">
-  <h2 class="text-3xl font-medium tracking-tight">Session Complete</h2>
+<div class="flex w-full max-w-md flex-col items-center gap-6 p-8 text-center">
+  <h2 class="text-xl font-medium tracking-tight">Session Complete</h2>
 
-  <div class="text-xl font-medium">{sessionName}</div>
+  <div class="text-base font-medium">{sessionName}</div>
 
-  <div class="text-5xl font-bold">{formattedDuration}</div>
+  <div class="text-base-content/70 text-xs">{focusedGoal}</div>
 
-  <div class="mt-4 w-full">
-    <div class="mb-4 text-xl font-medium">How focused was I?</div>
+  <div class="text-3xl font-bold">{formattedDuration}</div>
+
+  <div class="mt-2 w-full">
+    <div class="mb-3 text-sm font-medium">How focused was I?</div>
 
     <div class="flex justify-center gap-3">
       {#each Array(5) as _, i}
@@ -65,7 +67,7 @@
 
   <button
     on:click={completeReview}
-    class="bg-primary text-primary-content hover:bg-primary/90 focus-visible:ring-primary mt-8 inline-flex h-14 w-full items-center justify-center rounded-full px-4 py-2 text-lg font-medium shadow transition-colors focus-visible:ring-1 focus-visible:outline-none"
+    class="bg-primary text-primary-content hover:bg-primary/90 focus-visible:ring-primary mt-6 inline-flex h-9 w-full items-center justify-center rounded-md px-4 py-2 text-xs font-medium shadow transition-colors focus-visible:ring-1 focus-visible:outline-none"
   >
     Finish
   </button>

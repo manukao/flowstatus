@@ -6,6 +6,7 @@
 
   const dispatch = createEventDispatcher();
   let canvas: HTMLCanvasElement;
+  let container: HTMLDivElement;
 
   interface Star {
     x: number;
@@ -15,18 +16,23 @@
   }
 
   onMount(() => {
-    if (!canvas) return;
+    if (!canvas || !container) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas to full screen
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Set canvas to container size
+    const updateCanvasSize = () => {
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    };
+
+    updateCanvasSize();
 
     // Create stars
     const stars: Star[] = [];
-    for (let i = 0; i < 400; i++) {
+    for (let i = 0; i < 200; i++) {
       stars.push({
         x: Math.random() * canvas.width - canvas.width / 2,
         y: Math.random() * canvas.height - canvas.height / 2,
@@ -101,26 +107,22 @@
 
     animationId = requestAnimationFrame(animate);
 
-    // Handle window resize
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
+    // Handle container resize
+    const resizeObserver = new ResizeObserver(updateCanvasSize);
+    resizeObserver.observe(container);
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
     };
   });
 </script>
 
-<div class="fixed inset-0 z-50 flex items-center justify-center">
-  <canvas bind:this={canvas} class="fixed inset-0 z-0 bg-black"></canvas>
+<div bind:this={container} class="relative h-full w-full bg-black">
+  <canvas bind:this={canvas} class="absolute inset-0 z-0"></canvas>
 
   <!-- Message with fade-in animation -->
-  <div class="relative z-10 text-center">
+  <div class="absolute inset-0 z-10 flex items-center justify-center">
     <div class="animate-fade-in-up text-2xl font-light text-white opacity-90">{message}</div>
   </div>
 </div>

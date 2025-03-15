@@ -26,8 +26,8 @@
         id="sessionName"
         type="text"
         bind:value={sessionName}
-        placeholder="Deep Design Work"
-        class="border-base-300 placeholder:text-base-content/50 focus:ring-primary flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus:ring-1 focus:outline-none"
+        placeholder=" e.g. Deep Work"
+        class="border-base-300 placeholder:text-base-content/50 flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus:ring-1 focus:outline-none"
       />
     </div>
 
@@ -39,7 +39,7 @@
         bind:value={focusedGoal}
         maxlength="30"
         placeholder="I will focus on..."
-        class="border-base-300 placeholder:text-base-content/50 focus:ring-primary flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus:ring-1 focus:outline-none"
+        class="border-base-300 placeholder:text-base-content/50 flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus:ring-1 focus:outline-none"
       />
       <div class="text-base-content/70 text-right text-xs">
         {focusedGoal.length}/30 characters

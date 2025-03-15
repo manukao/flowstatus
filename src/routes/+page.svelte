@@ -6,20 +6,12 @@
   import SessionSetup from '../components/SessionSetup.svelte';
   import TransitionAnimation from '../components/TransitionAnimation.svelte';
   import ActiveSession from '../components/ActiveSession.svelte';
-  import SessionComplete from '../components/SessionComplete.svelte';
   import SessionReview from '../components/SessionReview.svelte';
   import Scoreboard from '../components/Scoreboard.svelte';
   import ThemeToggle from '../components/ThemeToggle.svelte';
 
   // App states
-  type AppState =
-    | 'welcome'
-    | 'setup'
-    | 'transition-in'
-    | 'active'
-    | 'complete'
-    | 'review'
-    | 'scoreboard';
+  type AppState = 'welcome' | 'setup' | 'transition-in' | 'active' | 'review' | 'scoreboard';
   let currentState: AppState = 'welcome';
 
   // Session data
@@ -67,10 +59,7 @@
   function handleEndSession(event: CustomEvent<{ duration: number; formattedDuration: string }>) {
     sessionDuration = event.detail.duration;
     formattedDuration = event.detail.formattedDuration;
-    currentState = 'complete';
-  }
-
-  function handleCompletionAnimationDone() {
+    // Skip the complete screen and go directly to review
     currentState = 'review';
   }
 
@@ -98,8 +87,11 @@
   }
 </script>
 
-<main class="relative flex h-full w-full flex-col items-center justify-center">
-  <ThemeToggle />
+<main class="relative h-full w-full">
+  <!-- Theme toggle positioned in the top-right corner -->
+  <div class="absolute top-2 right-2 z-50">
+    <ThemeToggle />
+  </div>
 
   <div class="flex h-full w-full items-center justify-center">
     {#if currentState === 'welcome'}
@@ -110,12 +102,6 @@
       <TransitionAnimation on:transitionComplete={handleTransitionComplete} />
     {:else if currentState === 'active'}
       <ActiveSession {sessionName} {focusedGoal} on:endSession={handleEndSession} />
-    {:else if currentState === 'complete'}
-      <SessionComplete
-        {sessionName}
-        {formattedDuration}
-        on:animationComplete={handleCompletionAnimationDone}
-      />
     {:else if currentState === 'review'}
       <SessionReview
         {sessionName}
