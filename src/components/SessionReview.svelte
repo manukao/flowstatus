@@ -35,7 +35,7 @@
 </script>
 
 <div class="flex w-full max-w-md flex-col items-center gap-6 p-8 text-center">
-  <h2 class="text-xl font-medium tracking-tight">Session Complete</h2>
+  <h2 class="text-sm font-medium tracking-tight">Nice work. You showed up.</h2>
 
   <div class="text-base font-medium">{sessionName}</div>
 
@@ -50,10 +50,10 @@
       {#each Array(5) as _, i}
         <button
           on:click={() => (focusRating = i + 1)}
-          class="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors {i <
-          focusRating
-            ? 'bg-primary text-primary-content'
-            : 'border-base-300 text-base-content/50 border'}"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors
+          {i < focusRating
+            ? 'bg-primary text-primary-content hover:bg-primary/90 dark:bg-primary dark:text-primary-content dark:hover:bg-primary/80'
+            : 'border-base-300 text-base-content/50 hover:border-primary hover:bg-primary/10 hover:text-primary dark:border-base-700 dark:text-base-content/50 dark:hover:border-primary dark:hover:bg-primary/20 dark:hover:text-primary border'}"
         >
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" stroke="none">
             <path

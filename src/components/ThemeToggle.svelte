@@ -38,7 +38,7 @@
 
 <button
   on:click={toggleTheme}
-  class="border-base-300 bg-base-100 hover:bg-base-200 focus-visible:ring-primary absolute top-4 right-4 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full border shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none"
+  class="border-base-300 bg-base-100 hover:bg-base-content hover:text-base-100 focus-visible:ring-primary absolute top-4 right-4 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full border shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none"
   aria-label="Toggle theme"
 >
   {#if darkMode}

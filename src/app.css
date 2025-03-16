@@ -24,7 +24,12 @@
     --base-content: 0 0% 98%;
   }
 
-  html {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
     font-family:
       system-ui,
       -apple-system,
@@ -45,6 +50,28 @@
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
+  }
+
+  /* Override browser autocomplete styling */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px hsl(var(--base-100)) inset !important;
+    -webkit-text-fill-color: hsl(var(--base-content)) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* For Firefox */
+  input:autofill {
+    background-color: hsl(var(--base-100)) !important;
+    color: hsl(var(--base-content)) !important;
+  }
+
+  /* For Edge */
+  input:-internal-autofill-selected {
+    background-color: hsl(var(--base-100)) !important;
+    color: hsl(var(--base-content)) !important;
   }
 }
 
@@ -108,6 +135,13 @@
   }
   .border-base-300 {
     border-color: hsl(var(--base-300));
+  }
+  .hover-effect {
+    @apply transition-all duration-200;
+  }
+  .hover-effect:hover:not(:disabled) {
+    background-color: hsl(var(--hover-bg));
+    color: hsl(var(--hover-text));
   }
   .animate-fade-in-up {
     animation: fadeInUp 0.6s ease-out forwards;

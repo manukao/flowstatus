@@ -79,7 +79,14 @@
     checkTheme();
 
     // Listen for theme changes
-    const observer = new MutationObserver(checkTheme);
+    const observer = new MutationObserver(() => {
+      checkTheme();
+      if (ctx) {
+        // Clear canvas with the correct background color when theme changes
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    });
+
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class'],
@@ -87,12 +94,15 @@
 
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     // Set canvas dimensions
     canvas.width = 128;
     canvas.height = 128;
+
+    // Clear canvas with transparent background
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Create particles
     for (let i = 0; i < 50; i++) {
@@ -110,8 +120,13 @@
 
     // Animation
     const animate = (timestamp: number) => {
-      // Clear canvas with semi-transparent background for trail effect
-      ctx.fillStyle = isDarkMode ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.05)';
+      // Clear canvas completely to ensure transparency
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Apply a very subtle fade effect
+      ctx.fillStyle = isDarkMode
+        ? 'rgba(24, 24, 27, 0.01)' // Dark mode background with very low opacity
+        : 'rgba(255, 255, 255, 0.01)'; // Light mode background with very low opacity
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Draw center circle
@@ -190,10 +205,8 @@
 
   <!-- Animation -->
   <div class="my-8 flex items-center justify-center">
-    <div
-      class="bg-gradient-radial from-primary/20 to-primary/5 flex h-32 w-32 items-center justify-center rounded-full backdrop-blur-md"
-    >
-      <canvas bind:this={canvas} class="h-full w-full rounded-full"></canvas>
+    <div class="relative h-32 w-32">
+      <canvas bind:this={canvas} class="h-full w-full"></canvas>
     </div>
   </div>
 
