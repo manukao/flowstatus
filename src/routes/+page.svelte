@@ -1,16 +1,123 @@
 <script lang="ts">
-  import '../app.css';
+  import { onMount } from 'svelte';
+  import { flowStore } from '../lib/stores';
+
+  import WelcomeScreen from '../components/WelcomeScreen.svelte';
+  import SessionSetup from '../components/SessionSetup.svelte';
+  import TransitionAnimation from '../components/TransitionAnimation.svelte';
+  import ActiveSession from '../components/ActiveSession.svelte';
+  import SessionReview from '../components/SessionReview.svelte';
+  import Scoreboard from '../components/Scoreboard.svelte';
+  import ThemeToggle from '../components/ThemeToggle.svelte';
+
+  // App states
+  type AppState = 'welcome' | 'setup' | 'transition-in' | 'active' | 'review' | 'scoreboard';
+  let currentState: AppState = 'welcome';
+
+  // Session data
+  let sessionName = '';
+  let focusedGoal = '';
+  let sessionDuration = 0;
+  let formattedDuration = '';
+
+  // Store data
+  let sessions: any[] = [];
+  let streak = 0;
+  let totalScore = 0;
+
+  // Subscribe to store
+  const unsubscribe = flowStore.subscribe((state: any) => {
+    sessions = state.sessions;
+    streak = state.streak;
+    totalScore = state.totalScore;
+  });
+
+  onMount(() => {
+    // Check if we should go directly to scoreboard (if there are previous sessions)
+    if (sessions.length > 0) {
+      currentState = 'scoreboard';
+    }
+
+    return unsubscribe;
+  });
+
+  // Event handlers
+  function handleStartSession() {
+    currentState = 'setup';
+  }
+
+  function handleBeginFocus(event: CustomEvent<{ sessionName: string; focusedGoal: string }>) {
+    sessionName = event.detail.sessionName;
+    focusedGoal = event.detail.focusedGoal;
+    currentState = 'transition-in';
+  }
+
+  function handleTransitionComplete() {
+    currentState = 'active';
+  }
+
+  function handleEndSession(event: CustomEvent<{ duration: number; formattedDuration: string }>) {
+    sessionDuration = event.detail.duration;
+    formattedDuration = event.detail.formattedDuration;
+    // Skip the complete screen and go directly to review
+    currentState = 'review';
+  }
+
+  function handleReviewComplete(event: CustomEvent<{ focusRating: number }>) {
+    // Add session to store
+    flowStore.addSession({
+      sessionName,
+      focusedGoal,
+      duration: sessionDuration,
+      formattedDuration,
+      focusRating: event.detail.focusRating,
+    });
+
+    currentState = 'scoreboard';
+  }
+
+  function handleStartNewSession() {
+    // Reset session data
+    sessionName = '';
+    focusedGoal = '';
+    sessionDuration = 0;
+    formattedDuration = '';
+
+    currentState = 'setup';
+  }
 </script>
 
-<main class="flex min-h-screen flex-col items-center justify-center p-8 text-center">
-  <h1 class="mb-4 text-4xl font-bold text-pink-500">FlowStatus</h1>
+<main class="relative h-full w-full">
+  <!-- Theme toggle positioned in the top-right corner -->
+  <div class="absolute top-2 right-2 z-50">
+    <ThemeToggle />
+  </div>
 
-  <p class="mb-8 max-w-2xl text-xl">
-    A minimalistic app that helps you stay in the flow and track your productivity throughout the
-    day.
-  </p>
-
-  <div class="rounded-lg bg-white/10 p-6 backdrop-blur-sm">
-    <p class="btn btn-primary text-lg">Ready to enhance your focus and productivity.</p>
+  <div class="flex h-full w-full items-center justify-center">
+    {#if currentState === 'welcome'}
+      <WelcomeScreen on:startSession={handleStartSession} />
+    {:else if currentState === 'setup'}
+      <SessionSetup on:beginFocus={handleBeginFocus} />
+    {:else if currentState === 'transition-in'}
+      <TransitionAnimation on:transitionComplete={handleTransitionComplete} />
+    {:else if currentState === 'active'}
+      <ActiveSession {sessionName} {focusedGoal} on:endSession={handleEndSession} />
+    {:else if currentState === 'review'}
+      <SessionReview
+        {sessionName}
+        {focusedGoal}
+        duration={sessionDuration}
+        {formattedDuration}
+        on:reviewComplete={handleReviewComplete}
+      />
+    {:else if currentState === 'scoreboard'}
+      <Scoreboard {sessions} {streak} {totalScore} on:startNewSession={handleStartNewSession} />
+    {/if}
   </div>
 </main>
+
+<style>
+  :global(body) {
+    overflow-x: hidden;
+  }
+</style>

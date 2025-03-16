@@ -12,9 +12,18 @@
   "app": {
     "windows": [
       {
-        "title": "flowstatus",
-        "width": 800,
-        "height": 600
+        "title": "FlowStatus",
+        "width": 360,
+        "height": 600,
+        "minWidth": 360,
+        "minHeight": 600,
+        "maxWidth": 360,
+        "maxHeight": 600,
+        "resizable": false,
+        "center": true,
+        "decorations": true,
+        "transparent": false,
+        "skipTaskbar": false
       }
     ],
     "security": {
